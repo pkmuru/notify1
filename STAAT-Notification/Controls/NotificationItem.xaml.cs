@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using STAAT_Notification.Models;
 
@@ -44,6 +46,10 @@ namespace STAAT_Notification.Controls
 
         public static readonly DependencyProperty NotificationDataProperty =
             DependencyProperty.Register("NotificationData", typeof(Notification), typeof(NotificationItem));
+
+        public static readonly DependencyProperty AnimationDelayProperty =
+            DependencyProperty.Register("AnimationDelay", typeof(double), typeof(NotificationItem), 
+                new PropertyMetadata(0.0));
 
         public string NotificationId
         {
@@ -105,6 +111,12 @@ namespace STAAT_Notification.Controls
             set { SetValue(NotificationDataProperty, value); }
         }
 
+        public double AnimationDelay
+        {
+            get { return (double)GetValue(AnimationDelayProperty); }
+            set { SetValue(AnimationDelayProperty, value); }
+        }
+
         public event EventHandler<string> CloseRequested;
         public event EventHandler<Notification> ActionClicked;
 
@@ -129,43 +141,89 @@ namespace STAAT_Notification.Controls
         {
             AnimateAndClose();
         }
+        
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Set initial state for animation
+            Opacity = 0;
+            ItemTranslateTransform.X = 50;
+            
+            // Calculate animation delay based on position in ItemsControl
+            var itemsControl = ItemsControl.ItemsControlFromItemContainer(Parent as DependencyObject);
+            if (itemsControl != null && NotificationData != null)
+            {
+                var index = itemsControl.Items.IndexOf(NotificationData);
+                if (index >= 0)
+                {
+                    // Stagger animations by 50ms per item
+                    AnimationDelay = index * 50;
+                }
+            }
+            
+            // Wait for the animation delay if specified
+            if (AnimationDelay > 0)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(AnimationDelay));
+            }
+            
+            // Play entrance animation
+            var entranceStoryboard = Resources["EntranceAnimation"] as Storyboard;
+            if (entranceStoryboard != null)
+            {
+                Storyboard.SetTarget(entranceStoryboard, this);
+                entranceStoryboard.Begin();
+            }
+        }
 
         private void ActionButton_Click(object sender, RoutedEventArgs e)
         {
             ActionClicked?.Invoke(this, NotificationData);
         }
 
-        private void AnimateAndClose()
+        private async void AnimateAndClose()
         {
-            var storyboard = new Storyboard();
-            
-            var fadeAnimation = new DoubleAnimation
+            // Play deletion animation
+            var deletionStoryboard = Resources["DeletionAnimation"] as Storyboard;
+            if (deletionStoryboard != null)
             {
-                To = 0,
-                Duration = TimeSpan.FromMilliseconds(200),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
-            };
-            Storyboard.SetTarget(fadeAnimation, this);
-            Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath("Opacity"));
-            
-            var slideAnimation = new DoubleAnimation
-            {
-                To = 50,
-                Duration = TimeSpan.FromMilliseconds(200),
-                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn }
-            };
-            Storyboard.SetTarget(slideAnimation, SlideTransform);
-            Storyboard.SetTargetProperty(slideAnimation, new PropertyPath("X"));
-            
-            storyboard.Children.Add(fadeAnimation);
-            storyboard.Children.Add(slideAnimation);
-            
-            storyboard.Completed += (s, e) =>
-            {
+                var tcs = new TaskCompletionSource<bool>();
+                
+                EventHandler completedHandler = null;
+                completedHandler = (s, e) =>
+                {
+                    deletionStoryboard.Completed -= completedHandler;
+                    tcs.SetResult(true);
+                };
+                
+                deletionStoryboard.Completed += completedHandler;
+                Storyboard.SetTarget(deletionStoryboard, this);
+                deletionStoryboard.Begin();
+                
+                await tcs.Task;
+                
+                // Animate height collapse
+                await AnimateHeightCollapse();
+                
+                // Notify parent that this item should be removed
                 CloseRequested?.Invoke(this, NotificationId);
+            }
+        }
+        
+        private async Task AnimateHeightCollapse()
+        {
+            var heightAnimation = new DoubleAnimation
+            {
+                From = ActualHeight,
+                To = 0,
+                Duration = TimeSpan.FromMilliseconds(100),
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
             };
+
+            var tcs = new TaskCompletionSource<bool>();
+            heightAnimation.Completed += (s, e) => tcs.SetResult(true);
             
-            storyboard.Begin();
+            BeginAnimation(HeightProperty, heightAnimation);
+            await tcs.Task;
         }
 
         public void SetNotification(Notification notification)

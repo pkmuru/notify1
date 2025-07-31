@@ -6,11 +6,59 @@
              xmlns:local="clr-namespace:STAAT_Notification.Controls"
              xmlns:models="clr-namespace:STAAT_Notification.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="120" d:DesignWidth="350">
+             d:DesignHeight="120" d:DesignWidth="350"
+             Loaded="UserControl_Loaded">
     
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
+        <!-- Entrance Animation -->
+        <Storyboard x:Key="EntranceAnimation">
+            <DoubleAnimation 
+                Storyboard.TargetProperty="Opacity"
+                From="0" To="1" 
+                Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation 
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)"
+                From="50" To="0" 
+                Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        
+        <!-- Deletion Animation -->
+        <Storyboard x:Key="DeletionAnimation">
+            <DoubleAnimation 
+                Storyboard.TargetProperty="Opacity"
+                To="0" 
+                Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation 
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(TranslateTransform.X)"
+                To="50" 
+                Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseIn"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
     </UserControl.Resources>
+    
+    <UserControl.RenderTransform>
+        <TransformGroup>
+            <TranslateTransform x:Name="ItemTranslateTransform"/>
+            <ScaleTransform x:Name="ItemScaleTransform"/>
+        </TransformGroup>
+    </UserControl.RenderTransform>
     
     <Border x:Name="NotificationItemBorder" 
             Style="{StaticResource NotificationItemStyle}"
