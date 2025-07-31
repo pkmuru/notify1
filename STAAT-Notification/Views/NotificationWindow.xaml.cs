@@ -48,8 +48,9 @@ namespace STAAT_Notification.Views
             var dpiScale = DpiHelper.GetDpiScale(this);
             var workArea = SystemParameters.WorkArea;
             
-            Left = workArea.Right - (Width * dpiScale) - (16 * dpiScale);
-            Top = workArea.Bottom - (Height * dpiScale) - (16 * dpiScale);
+            // Position in bottom-right corner with Windows 11 style padding
+            Left = workArea.Right - (Width * dpiScale) - (24 * dpiScale);
+            Top = workArea.Bottom - (Height * dpiScale) - (48 * dpiScale);
         }
 
         private void AnimateIn()
@@ -280,6 +281,22 @@ namespace STAAT_Notification.Views
             {
                 // If notifications are turned off, close the window
                 AnimateOut(() => Close());
+            }
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Allow dragging the window
+            if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
+            {
+                try
+                {
+                    DragMove();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Can only initiate drag when left mouse button is pressed
+                }
             }
         }
 

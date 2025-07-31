@@ -73,7 +73,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="48"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="32"/>
             </Grid.ColumnDefinitions>
 
             <!-- Icon -->
@@ -98,29 +98,20 @@
                     
                     <TextBlock Grid.Column="0"
                                Text="{Binding AppName, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                               FontFamily="Segoe UI" 
-                               FontSize="11" 
-                               Foreground="{StaticResource SecondaryText}"
+                               Style="{StaticResource NotificationTimestampText}"
                                Margin="0,0,8,2"/>
                     
                     <TextBlock Grid.Column="1"
                                Text="{Binding TimestampDisplay, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                               FontFamily="Segoe UI" 
-                               FontSize="11" 
-                               Foreground="{StaticResource SecondaryText}"/>
+                               Style="{StaticResource NotificationTimestampText}"/>
                 </Grid>
                 
                 <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                           FontFamily="Segoe UI" 
-                           FontSize="14" 
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource PrimaryText}"
+                           Style="{StaticResource NotificationTitleStyle}"
                            Margin="0,0,0,2"/>
                 
                 <TextBlock Text="{Binding Message, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                           FontFamily="Segoe UI" 
-                           FontSize="13" 
-                           Foreground="{StaticResource SecondaryText}"
+                           Style="{StaticResource NotificationBodyText}"
                            TextWrapping="Wrap"
                            MaxWidth="250"/>
                 
@@ -128,14 +119,17 @@
                 <Button Content="{Binding ActionText, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                         Style="{StaticResource NotificationActionButton}"
                         Click="ActionButton_Click"
+                        HorizontalAlignment="Left"
                         Visibility="{Binding HasAction, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             </StackPanel>
 
             <!-- Close Button -->
             <Button Grid.Column="2" 
-                    Content="✕" 
+                    Content="&#xE711;" 
                     Style="{StaticResource CloseButtonStyle}"
                     VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Margin="0,-8,-8,0"
                     Click="CloseButton_Click"/>
         </Grid>
     </Border>

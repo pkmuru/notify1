@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:STAAT_Notification.Controls"
         mc:Ignorable="d"
         Title="Notifications" 
-        Height="500" Width="400"
+        Height="600" Width="360"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -46,18 +46,21 @@
         <TranslateTransform x:Name="WindowTransform"/>
     </Window.RenderTransform>
     
-    <Border Background="{StaticResource NotificationBackground}"
-            BorderBrush="{StaticResource NotificationBorder}"
-            BorderThickness="0"
-            CornerRadius="12">
+    <Border x:Name="MainBorder"
+            Background="#E5FFFFFF"
+            BorderBrush="#20000000"
+            BorderThickness="1"
+            CornerRadius="12"
+            MouseLeftButtonDown="Border_MouseLeftButtonDown">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="32" 
+            <DropShadowEffect BlurRadius="60" 
                               ShadowDepth="8" 
-                              Color="#20000000" 
-                              Opacity="0.15"/>
+                              Direction="270"
+                              Color="#000000" 
+                              Opacity="0.25"/>
         </Border.Effect>
         
-        <Grid Margin="16">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -65,10 +68,10 @@
 
             <!-- Header -->
             <Border Grid.Row="0" 
-                    Background="{StaticResource HeaderBackground}"
-                    CornerRadius="8,8,0,0"
-                    Margin="-16,-16,-16,0"
-                    Padding="16,16,16,16">
+                    Background="#F0FFFFFF"
+                    CornerRadius="12,12,0,0"
+                    Padding="20,16,20,16"
+                    MouseLeftButtonDown="Border_MouseLeftButtonDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -78,10 +81,7 @@
                     
                     <TextBlock Grid.Column="0"
                                Text="Notifications" 
-                               FontFamily="Segoe UI" 
-                               FontSize="20" 
-                               FontWeight="SemiBold"
-                               Foreground="{StaticResource PrimaryText}"/>
+                               Style="{StaticResource NotificationHeaderText}"/>
                     
                     <ToggleButton Grid.Column="1" 
                                   Name="SettingsToggle"
@@ -110,7 +110,8 @@
             <!-- Notifications List -->
             <ScrollViewer Grid.Row="1" 
                           Style="{StaticResource Windows11ScrollViewer}"
-                          Name="NotificationsScrollViewer">
+                          Name="NotificationsScrollViewer"
+                          Margin="0,8,0,0">
                 <ItemsControl Name="NotificationsItemsControl" 
                               ItemsSource="{Binding Notifications}">
                     <ItemsControl.ItemTemplate>
@@ -136,9 +137,7 @@
             <!-- Empty State -->
             <TextBlock Grid.Row="1" 
                        Text="No new notifications" 
-                       FontFamily="Segoe UI" 
-                       FontSize="14" 
-                       Foreground="{StaticResource SecondaryText}"
+                       Style="{StaticResource NotificationBodyText}"
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"
                        Visibility="{Binding NoNotificationsVisibility}"/>
