@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:learn.microsoft.com)",
       "Bash(mkdir:*)",
-      "Bash(del HelpersHttpImageConverter.cs)"
+      "Bash(del HelpersHttpImageConverter.cs)",
+      "Bash(dir:*)"
     ],
     "deny": []
   }

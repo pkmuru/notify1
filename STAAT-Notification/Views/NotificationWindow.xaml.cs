@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using STAAT_Notification.Controls;
 using STAAT_Notification.Helpers;
 using STAAT_Notification.Models;
 using STAAT_Notification.Settings;
@@ -136,6 +137,47 @@ namespace STAAT_Notification.Views
             }
         }
 
+        private void NotificationItem_CloseRequested(object sender, string notificationId)
+        {
+            if (!string.IsNullOrEmpty(notificationId))
+            {
+                var notification = Notifications.FirstOrDefault(n => n.Id == notificationId);
+                if (notification != null)
+                {
+                    // Remove from collection (animation already handled by NotificationItem)
+                    Notifications.Remove(notification);
+                    
+                    if (Notifications.Count == 0)
+                    {
+                        AnimateOut(() => Close());
+                    }
+                }
+            }
+        }
+
+        private void NotificationItem_ActionClicked(object sender, Notification notification)
+        {
+            if (notification != null && !string.IsNullOrEmpty(notification.ActionUrl))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = notification.ActionUrl,
+                        UseShellExecute = true
+                    });
+                    
+                    // Close the notification window after action is clicked
+                    AnimateOut(() => Close());
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't show to user
+                    Console.WriteLine($"Error opening URL: {ex.Message}");
+                }
+            }
+        }
+
         private FrameworkElement GetNotificationContainer(string notificationId)
         {
             // Find the container in the ItemsControl
@@ -144,10 +186,10 @@ namespace STAAT_Notification.Views
                 var container = NotificationsItemsControl.ItemContainerGenerator.ContainerFromIndex(i) as ContentPresenter;
                 if (container != null)
                 {
-                    var border = FindVisualChild<Border>(container);
-                    if (border?.Tag?.ToString() == notificationId)
+                    var notificationItem = FindVisualChild<NotificationItem>(container);
+                    if (notificationItem?.NotificationId == notificationId)
                     {
-                        return border;
+                        return notificationItem;
                     }
                 }
             }
@@ -241,30 +283,5 @@ namespace STAAT_Notification.Views
             }
         }
 
-        private void ActionButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as Button;
-            var notification = button?.Tag as Notification;
-            
-            if (notification != null && !string.IsNullOrEmpty(notification.ActionUrl))
-            {
-                try
-                {
-                    Process.Start(new ProcessStartInfo
-                    {
-                        FileName = notification.ActionUrl,
-                        UseShellExecute = true
-                    });
-                    
-                    // Close the notification window after action is clicked
-                    AnimateOut(() => Close());
-                }
-                catch (Exception ex)
-                {
-                    // Log error but don't show to user
-                    Console.WriteLine($"Error opening URL: {ex.Message}");
-                }
-            }
-        }
     }
 }
