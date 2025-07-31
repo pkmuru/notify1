@@ -1,0 +1,135 @@
+﻿<Window x:Class="STAAT_Notification.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:STAAT_Notification"
+        mc:Ignorable="d"
+        Title="STAAT Notification Manager" Height="350" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize">
+    
+    
+    <Grid Background="#F5F5F5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="White" BorderBrush="#E5E5E5" BorderThickness="0,0,0,1">
+            <TextBlock Text="STAAT Notification Manager" 
+                       FontFamily="Segoe UI" 
+                       FontSize="24" 
+                       FontWeight="Light"
+                       Foreground="#1F1F1F"
+                       Margin="20,20,20,20"/>
+        </Border>
+
+        <!-- Content -->
+        <StackPanel Grid.Row="1" Margin="20,20,20,0">
+            <TextBlock Text="Notification Settings" 
+                       FontFamily="Segoe UI" 
+                       FontSize="16" 
+                       FontWeight="SemiBold"
+                       Foreground="#1F1F1F"
+                       Margin="0,0,0,20"/>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" 
+                           Text="Polling Interval:" 
+                           FontFamily="Segoe UI" 
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Margin="0,0,0,10"/>
+                
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,10">
+                    <TextBox Name="PollingIntervalTextBox" 
+                             Text="24" 
+                             Width="60" 
+                             FontFamily="Segoe UI" 
+                             FontSize="14"
+                             VerticalContentAlignment="Center"
+                             Padding="5,3"/>
+                    <TextBlock Text="hours" 
+                               FontFamily="Segoe UI" 
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" 
+                           Text="Status:" 
+                           FontFamily="Segoe UI" 
+                           FontSize="14"
+                           VerticalAlignment="Center"/>
+                
+                <TextBlock Grid.Row="1" Grid.Column="1" 
+                           Name="StatusTextBlock"
+                           Text="Not started" 
+                           FontFamily="Segoe UI" 
+                           FontSize="14"
+                           Foreground="#5D5D5D"/>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Center">
+                <Button Name="StartButton" 
+                        Content="Start Polling" 
+                        Width="120" 
+                        Height="36"
+                        FontFamily="Segoe UI"
+                        FontSize="14"
+                        Background="#0078D4"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Margin="0,0,10,0"
+                        Click="StartButton_Click"/>
+                
+                <Button Name="StopButton" 
+                        Content="Stop Polling" 
+                        Width="120" 
+                        Height="36"
+                        FontFamily="Segoe UI"
+                        FontSize="14"
+                        Background="#E5E5E5"
+                        Foreground="#1F1F1F"
+                        BorderThickness="0"
+                        Margin="0,0,10,0"
+                        IsEnabled="False"
+                        Click="StopButton_Click"/>
+                
+                <Button Name="TestButton" 
+                        Content="Test Now" 
+                        Width="120" 
+                        Height="36"
+                        FontFamily="Segoe UI"
+                        FontSize="14"
+                        Background="#107C10"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Click="TestButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="#FAFAFA" BorderBrush="#E5E5E5" BorderThickness="0,1,0,0">
+            <TextBlock Text="Notifications will appear in the bottom-right corner of your screen" 
+                       FontFamily="Segoe UI" 
+                       FontSize="12"
+                       Foreground="#5D5D5D"
+                       HorizontalAlignment="Center"
+                       Margin="0,10,0,10"/>
+        </Border>
+    </Grid>
+</Window>

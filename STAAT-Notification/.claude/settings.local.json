@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:learn.microsoft.com)",
+      "Bash(mkdir:*)",
+      "Bash(del HelpersHttpImageConverter.cs)"
+    ],
+    "deny": []
+  }
+}

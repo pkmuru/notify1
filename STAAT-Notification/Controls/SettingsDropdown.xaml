@@ -1,0 +1,109 @@
+<UserControl x:Class="STAAT_Notification.Controls.SettingsDropdown"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="350">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Windows11Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Border Background="{StaticResource SettingsDropdownBg}"
+            BorderBrush="{StaticResource SettingsDropdownBorder}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Margin="0,8,0,0">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="16" 
+                              ShadowDepth="4" 
+                              Color="#20000000" 
+                              Opacity="0.2"/>
+        </Border.Effect>
+        
+        <StackPanel Margin="16">
+            <!-- Header -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0"
+                           Text="🔔" 
+                           FontSize="16" 
+                           VerticalAlignment="Center"
+                           Margin="0,0,8,0"/>
+                
+                <TextBlock Grid.Column="1"
+                           Text="Notification Settings" 
+                           FontFamily="Segoe UI" 
+                           FontSize="16" 
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource PrimaryText}"/>
+            </Grid>
+            
+            <Separator Background="{StaticResource NotificationBorder}" Height="1" Margin="0,0,0,12"/>
+            
+            <!-- Mute Options -->
+            <TextBlock Text="Mute notifications for:" 
+                       FontFamily="Segoe UI" 
+                       FontSize="14" 
+                       Foreground="{StaticResource SecondaryText}"
+                       Margin="0,0,0,8"/>
+            
+            <RadioButton Name="MuteNone" 
+                         Content="Don't mute" 
+                         GroupName="MuteDuration"
+                         IsChecked="True"
+                         Margin="0,0,0,6"
+                         Tag="None"/>
+            
+            <RadioButton Name="MuteOneHour" 
+                         Content="1 hour" 
+                         GroupName="MuteDuration"
+                         Margin="0,0,0,6"
+                         Tag="OneHour"/>
+            
+            <RadioButton Name="MuteFourHours" 
+                         Content="4 hours" 
+                         GroupName="MuteDuration"
+                         Margin="0,0,0,6"
+                         Tag="FourHours"/>
+            
+            <RadioButton Name="MuteEightHours" 
+                         Content="8 hours" 
+                         GroupName="MuteDuration"
+                         Margin="0,0,0,6"
+                         Tag="EightHours"/>
+            
+            <RadioButton Name="MuteUntilTomorrow" 
+                         Content="Until tomorrow (9:00 AM)" 
+                         GroupName="MuteDuration"
+                         Margin="0,0,0,12"
+                         Tag="UntilTomorrow"/>
+            
+            <Separator Background="{StaticResource NotificationBorder}" Height="1" Margin="0,0,0,12"/>
+            
+            <!-- Turn off all notifications -->
+            <CheckBox Name="TurnOffNotifications" 
+                      Content="Turn off all notifications" 
+                      FontFamily="Segoe UI" 
+                      FontSize="14"
+                      Foreground="{StaticResource PrimaryText}"/>
+            
+            <!-- Mute Status -->
+            <TextBlock Name="MuteStatusText" 
+                       FontFamily="Segoe UI" 
+                       FontSize="12" 
+                       Foreground="{StaticResource AccentColor}"
+                       Margin="0,12,0,0"
+                       Visibility="Collapsed"/>
+        </StackPanel>
+    </Border>
+</UserControl>
