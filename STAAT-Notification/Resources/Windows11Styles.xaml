@@ -244,9 +244,6 @@
         <Setter Property="Height" Value="24"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeFluent}"/>
-        <Setter Property="FontSize" Value="10"/>
-        <Setter Property="Foreground" Value="{StaticResource SecondaryText}"/>
         <Setter Property="Visibility" Value="Collapsed"/>
         <Setter Property="Opacity" Value="0.6"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -256,12 +253,21 @@
                     <Border x:Name="ButtonBorder"
                             Background="{TemplateBinding Background}"
                             CornerRadius="4">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Path x:Name="CloseIcon"
+                              Width="10"
+                              Height="10"
+                              Stretch="Uniform"
+                              Fill="{StaticResource SecondaryText}"
+                              Data="M 0,0 L 10,10 M 10,0 L 0,10"
+                              StrokeThickness="1.5"
+                              Stroke="{StaticResource SecondaryText}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="1"/>
                             <Setter TargetName="ButtonBorder" Property="Background" Value="#10000000"/>
+                            <Setter TargetName="CloseIcon" Property="Fill" Value="{StaticResource PrimaryText}"/>
+                            <Setter TargetName="CloseIcon" Property="Stroke" Value="{StaticResource PrimaryText}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="ButtonBorder" Property="Background" Value="#20000000"/>

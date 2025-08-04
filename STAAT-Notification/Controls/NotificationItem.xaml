@@ -128,11 +128,10 @@
             <!-- Close Button -->
             <Button Grid.Column="2" 
                     x:Name="CloseButton"
-                    Content="&#xE711;" 
                     Style="{StaticResource CloseButtonStyle}"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right"
-                    Margin="0,0,0,0"
+                    Margin="0,0,-8,0"
                     Click="CloseButton_Click"/>
         </Grid>
     </Border>
