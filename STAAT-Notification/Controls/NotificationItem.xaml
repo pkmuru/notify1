@@ -60,9 +60,18 @@
         </TransformGroup>
     </UserControl.RenderTransform>
     
-    <Border x:Name="NotificationItemBorder" 
-            Style="{StaticResource NotificationItemStyle}"
-            RenderTransformOrigin="0.5,0.5">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1"/>
+        </Grid.RowDefinitions>
+        
+        <Border Grid.Row="0"
+                x:Name="NotificationItemBorder" 
+                Style="{StaticResource NotificationItemStyle}"
+                RenderTransformOrigin="0.5,0.5"
+                MouseEnter="NotificationItemBorder_MouseEnter"
+                MouseLeave="NotificationItemBorder_MouseLeave">
         <Border.RenderTransform>
             <TransformGroup>
                 <TranslateTransform x:Name="SlideTransform"/>
@@ -71,17 +80,18 @@
         </Border.RenderTransform>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="32"/>
+                <ColumnDefinition Width="24"/>
             </Grid.ColumnDefinitions>
 
             <!-- Icon -->
             <Border Grid.Column="0" 
-                    Width="40" 
-                    Height="40" 
-                    CornerRadius="20"
-                    Margin="0,0,12,0">
+                    Width="24" 
+                    Height="24" 
+                    CornerRadius="4"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Top">
                 <Border.Background>
                     <ImageBrush ImageSource="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}, TargetNullValue={x:Null}}" 
                                 Stretch="UniformToFill"/>
@@ -112,8 +122,7 @@
                 
                 <TextBlock Text="{Binding Message, RelativeSource={RelativeSource AncestorType=UserControl}}" 
                            Style="{StaticResource NotificationBodyText}"
-                           TextWrapping="Wrap"
-                           MaxWidth="250"/>
+                           TextWrapping="Wrap"/>
                 
                 <!-- Action Button -->
                 <Button Content="{Binding ActionText, RelativeSource={RelativeSource AncestorType=UserControl}}" 
@@ -125,12 +134,20 @@
 
             <!-- Close Button -->
             <Button Grid.Column="2" 
+                    x:Name="CloseButton"
                     Content="&#xE711;" 
                     Style="{StaticResource CloseButtonStyle}"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right"
-                    Margin="0,-8,-8,0"
+                    Margin="0,0,0,0"
                     Click="CloseButton_Click"/>
         </Grid>
     </Border>
+    
+    <!-- Divider -->
+    <Rectangle Grid.Row="1" 
+               Fill="#10000000"
+               Height="1"
+               Margin="12,0,12,0"/>
+    </Grid>
 </UserControl>

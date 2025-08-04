@@ -141,6 +141,22 @@ namespace STAAT_Notification.Controls
         {
             AnimateAndClose();
         }
+
+        private void NotificationItemBorder_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (CloseButton != null)
+            {
+                CloseButton.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void NotificationItemBorder_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (CloseButton != null)
+            {
+                CloseButton.Visibility = Visibility.Collapsed;
+            }
+        }
         
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

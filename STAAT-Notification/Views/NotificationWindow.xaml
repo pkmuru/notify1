@@ -47,17 +47,17 @@
     </Window.RenderTransform>
     
     <Border x:Name="MainBorder"
-            Background="#E5FFFFFF"
-            BorderBrush="#20000000"
+            Background="{StaticResource NotificationBackground}"
+            BorderBrush="#40000000"
             BorderThickness="1"
-            CornerRadius="12"
+            CornerRadius="8"
             MouseLeftButtonDown="Border_MouseLeftButtonDown">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="60" 
-                              ShadowDepth="8" 
+            <DropShadowEffect BlurRadius="20" 
+                              ShadowDepth="0" 
                               Direction="270"
                               Color="#000000" 
-                              Opacity="0.25"/>
+                              Opacity="0.15"/>
         </Border.Effect>
         
         <Grid>
@@ -68,9 +68,8 @@
 
             <!-- Header -->
             <Border Grid.Row="0" 
-                    Background="#F0FFFFFF"
-                    CornerRadius="12,12,0,0"
-                    Padding="20,16,20,16"
+                    Background="{StaticResource HeaderBackground}"
+                    Padding="12,12,12,8"
                     MouseLeftButtonDown="Border_MouseLeftButtonDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -86,7 +85,7 @@
                     <ToggleButton Grid.Column="1" 
                                   Name="SettingsToggle"
                                   Style="{StaticResource SettingsIconButtonStyle}"
-                                  Margin="0,0,8,0"
+                                  Margin="0,0,4,0"
                                   Click="SettingsToggle_Click"/>
                     
                     <Button Grid.Column="2" 
@@ -111,7 +110,8 @@
             <ScrollViewer Grid.Row="1" 
                           Style="{StaticResource Windows11ScrollViewer}"
                           Name="NotificationsScrollViewer"
-                          Margin="0,8,0,0">
+                          Padding="0,0,0,0"
+                          Margin="0,0,0,0">
                 <ItemsControl Name="NotificationsItemsControl" 
                               ItemsSource="{Binding Notifications}">
                     <ItemsControl.ItemTemplate>

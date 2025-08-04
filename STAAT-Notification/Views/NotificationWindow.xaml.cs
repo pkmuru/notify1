@@ -41,6 +41,7 @@ namespace STAAT_Notification.Views
         {
             PositionWindow();
             AnimateIn();
+            ApplyWindowsThemeColors();
         }
 
         private void PositionWindow()
@@ -251,6 +252,55 @@ namespace STAAT_Notification.Views
             
             element.BeginAnimation(HeightProperty, heightAnimation);
             await tcs.Task;
+        }
+
+        private void ApplyWindowsThemeColors()
+        {
+            try
+            {
+                var accentColor = WindowsThemeHelper.GetAccentColor();
+                var isLightTheme = WindowsThemeHelper.IsLightTheme();
+                
+                // Update accent colors
+                if (Resources.Contains("AccentColor"))
+                {
+                    Resources["AccentColor"] = new SolidColorBrush(accentColor);
+                }
+                
+                if (Resources.Contains("AccentHover"))
+                {
+                    Resources["AccentHover"] = new SolidColorBrush(WindowsThemeHelper.GetHoverAccentColor(accentColor));
+                }
+                
+                if (Resources.Contains("AccentPressed"))
+                {
+                    Resources["AccentPressed"] = new SolidColorBrush(WindowsThemeHelper.GetPressedAccentColor(accentColor));
+                }
+                
+                // Adjust colors based on theme
+                if (!isLightTheme)
+                {
+                    // Dark theme adjustments
+                    Resources["NotificationBackground"] = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+                    Resources["NotificationItemBackground"] = new SolidColorBrush(Color.FromRgb(42, 42, 42));
+                    Resources["NotificationItemHover"] = new SolidColorBrush(Color.FromRgb(48, 48, 48));
+                    Resources["HeaderBackground"] = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+                    Resources["PrimaryText"] = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                    Resources["SecondaryText"] = new SolidColorBrush(Color.FromRgb(200, 200, 200));
+                    Resources["TertiaryText"] = new SolidColorBrush(Color.FromRgb(150, 150, 150));
+                    Resources["DividerColor"] = new SolidColorBrush(Color.FromRgb(60, 60, 60));
+                    Resources["ScrollBarThumb"] = new SolidColorBrush(Color.FromRgb(100, 100, 100));
+                    Resources["ScrollBarThumbHover"] = new SolidColorBrush(Color.FromRgb(120, 120, 120));
+                    Resources["ScrollBarThumbPressed"] = new SolidColorBrush(Color.FromRgb(140, 140, 140));
+                    Resources["SettingsDropdownBg"] = new SolidColorBrush(Color.FromRgb(42, 42, 42));
+                    Resources["SettingsDropdownBorder"] = new SolidColorBrush(Color.FromRgb(60, 60, 60));
+                    Resources["NotificationBorder"] = new SolidColorBrush(Color.FromRgb(60, 60, 60));
+                }
+            }
+            catch
+            {
+                // Ignore any errors and use default colors
+            }
         }
 
         public void LoadNotifications(ObservableCollection<Notification> notifications)
