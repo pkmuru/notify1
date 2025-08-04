@@ -48,16 +48,16 @@
     
     <Border x:Name="MainBorder"
             Background="{StaticResource NotificationBackground}"
-            BorderBrush="#40000000"
+            BorderBrush="#30000000"
             BorderThickness="1"
-            CornerRadius="8"
+            CornerRadius="12"
             MouseLeftButtonDown="Border_MouseLeftButtonDown">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="20" 
-                              ShadowDepth="0" 
+            <DropShadowEffect BlurRadius="30" 
+                              ShadowDepth="8" 
                               Direction="270"
                               Color="#000000" 
-                              Opacity="0.15"/>
+                              Opacity="0.2"/>
         </Border.Effect>
         
         <Grid>
