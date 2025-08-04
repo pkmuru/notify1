@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using STAAT_Notification.Controls;
@@ -18,6 +19,7 @@ namespace STAAT_Notification.Views
     public partial class NotificationWindow : Window
     {
         public ObservableCollection<Notification> Notifications { get; set; }
+        private bool _dpiHookInitialized = false;
         
         public Visibility NoNotificationsVisibility 
         { 
@@ -46,12 +48,73 @@ namespace STAAT_Notification.Views
 
         private void PositionWindow()
         {
-            var dpiScale = DpiHelper.GetDpiScale(this);
+            try
+            {
+                // Always use the primary monitor for notifications
+                // This ensures consistent positioning near the system tray
+                var targetMonitor = ScreenHelper.GetPrimaryMonitor();
+                
+                if (targetMonitor == null)
+                {
+                    // If we can't get monitor info, use fallback
+                    FallbackPositioning();
+                    return;
+                }
+                
+                // Get the notification position
+                var position = ScreenHelper.GetNotificationPosition(this, targetMonitor);
+                
+                // Set the position
+                Left = position.X;
+                Top = position.Y;
+                
+                // Handle DPI changes when window moves between monitors
+                // We'll hook this up only once when the window is first initialized
+                if (!_dpiHookInitialized)
+                {
+                    SourceInitialized += OnSourceInitialized;
+                    _dpiHookInitialized = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Fallback to simple positioning if advanced positioning fails
+                System.Diagnostics.Debug.WriteLine($"Advanced positioning failed: {ex.Message}");
+                FallbackPositioning();
+            }
+        }
+        
+        private void FallbackPositioning()
+        {
+            // Simple fallback using SystemParameters
             var workArea = SystemParameters.WorkArea;
+            Left = workArea.Right - Width - 24;
+            Top = workArea.Bottom - Height - 48;
+        }
+        
+        private void OnSourceInitialized(object sender, EventArgs e)
+        {
+            // Hook into DPI change notifications
+            var source = PresentationSource.FromVisual(this) as HwndSource;
+            if (source != null)
+            {
+                source.AddHook(WndProc);
+            }
+        }
+        
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            const int WM_DPICHANGED = 0x02E0;
             
-            // Position in bottom-right corner with Windows 11 style padding
-            Left = workArea.Right - (Width * dpiScale) - (24 * dpiScale);
-            Top = workArea.Bottom - (Height * dpiScale) - (48 * dpiScale);
+            if (msg == WM_DPICHANGED)
+            {
+                // Window moved to a monitor with different DPI
+                // Reposition the window
+                PositionWindow();
+                handled = true;
+            }
+            
+            return IntPtr.Zero;
         }
 
         private void AnimateIn()

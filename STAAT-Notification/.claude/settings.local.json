@@ -4,7 +4,8 @@
       "WebFetch(domain:learn.microsoft.com)",
       "Bash(mkdir:*)",
       "Bash(del HelpersHttpImageConverter.cs)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

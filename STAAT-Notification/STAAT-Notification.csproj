@@ -94,6 +94,7 @@
       <DependentUpon>SettingsDropdown.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DpiHelper.cs" />
+    <Compile Include="Helpers\ScreenHelper.cs" />
     <Compile Include="Helpers\TrayIconHelper.cs" />
     <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\Notification.cs" />
